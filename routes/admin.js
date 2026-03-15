@@ -89,6 +89,27 @@ adminRouter.get("/course/bulk",adminMiddleware,async function(req,res){
     })
 })
 
+adminRouter.delete("/course", adminMiddleware, async function(req, res){
+    const adminId = req.userId;
+    const { courseId } = req.body;
+
+    const course = await courseModel.findOneAndDelete({
+        _id: courseId,
+        creatorId: adminId
+    });
+
+    if (course) {
+        res.json({
+            message: "Course Deleted",
+            courseId: course._id
+        });
+    } else {
+        res.status(404).json({
+            message: "Course not found or you don't have permission to delete it"
+        });
+    }
+})
+
 module.exports = {
     adminRouter: adminRouter
 }

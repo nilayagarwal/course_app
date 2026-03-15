@@ -38,6 +38,25 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleDelete = async (courseId) => {
+    if (!window.confirm("Are you sure you want to delete this course?")) return;
+
+    try {
+      const response = await fetch(`${BASE_URL}/admin/course`, {
+        method: "DELETE",
+        headers: getHeaders(),
+        body: JSON.stringify({ courseId })
+      });
+      const data = await response.json();
+      
+      if (!response.ok) throw new Error(data.message || "Failed to delete course");
+      
+      setCourses(courses.filter(c => c._id !== courseId));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   if (loading) return <div className="page-loader"><div className="spinner"></div></div>;
 
   return (
@@ -70,6 +89,12 @@ export default function AdminDashboard() {
                <CourseCard course={course} isPurchased={true} />
                <div style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '8px' }}>
                   <span className="badge" style={{ background: 'rgba(0,0,0,0.8)', border: '1px solid var(--border-strong)', color: 'white', padding: '0.25rem 0.5rem' }}>Your Course</span>
+                  <button 
+                    onClick={() => handleDelete(course._id)}
+                    style={{ background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '4px', padding: '0.25rem 0.5rem', cursor: 'pointer', zIndex: 10 }}
+                  >
+                    Delete
+                  </button>
                </div>
             </div>
           ))}
