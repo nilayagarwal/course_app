@@ -40,7 +40,9 @@ userRouter.post("/signin", async function(req,res){
     
 })
 
-userRouter.get("/purchases",async function(req,res){
+const { userMiddleware } = require("../middleware/user");
+
+userRouter.get("/purchases", userMiddleware, async function(req,res){
     const userId = req.userId;
 
     const purchases = await purchaseModel.find({

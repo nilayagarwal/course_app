@@ -12,9 +12,13 @@ export default function CourseCard({ course, onPurchase, isPurchased }) {
     >
       <div className="card-image-container">
         <img 
-          src={course.imageUrl || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800"} 
+          src={course.imageUrl && course.imageUrl.startsWith('http') ? course.imageUrl : "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800"} 
           alt={course.title} 
           className="card-image" 
+          onError={(e) => {
+            e.target.onerror = null; 
+            e.target.src = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800";
+          }}
         />
         <div className={`card-overlay ${isHovered ? 'visible' : ''}`}>
           <span className="price-tag">${course.price}</span>
