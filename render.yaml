@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: coursehub-backend
+    env: node
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: MONGO_URL
+        sync: false
